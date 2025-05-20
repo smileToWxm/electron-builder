@@ -711,11 +711,14 @@ export abstract class AppUpdater extends (EventEmitter as new () => TypedEmitter
     const updateInfo = taskOptions.downloadUpdateOptions.updateInfoAndProvider.info
     const version = updateInfo.version
     const packageInfo = fileInfo.packageInfo
-
+    const releaseName = updateInfo.releaseName;
+    
     function getCacheUpdateFileName(): string {
       // NodeJS URL doesn't decode automatically
       const urlPath = decodeURIComponent(taskOptions.fileInfo.url.pathname)
-      if (urlPath.toLowerCase().endsWith(`.${taskOptions.fileExtension.toLowerCase()}`)) {
+      if (releaseName) {
+        return releaseName
+      } else if (urlPath.toLowerCase().endsWith(`.${taskOptions.fileExtension.toLowerCase()}`)) {
         return path.basename(urlPath)
       } else {
         // url like /latest, generate name
